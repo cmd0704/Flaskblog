@@ -11,21 +11,22 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 db = SQLAlchemy(app)
 
 class Post(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    title = db.Column(db.String(50),nullable=False)
-    body = db.Column(db.String(300),nullable=False)
-    created_at = db.Column(db.DateTime,nullable=False,default=datetime.now(pytz.timezone("Asia/Tokyo")))
+    id=db.Column(db.Integer,primary_key=True)
+    title=db.Column(db.String(50),nullable=False)
+    body=db.Column(db.String(300),nullable=False)
+    created_at=db.Column(db.DateTime,nullable=False,default=datetime.now(pytz.timezone("Asia/Tokyo")))
 
-@app.route("/")
-def index():     #index関数の定義
-    return render_template("index.html")
+@app.route("/",methods=["GET"])  #変更
+def index():
+    posts = Post.query.all()   #DBに登録した内容をすべて取得する
+    return render_template("index.html",posts=posts)
 
 @app.route("/article1")
-def article1():  #article1関数の定義　
+def article1():
     return render_template("article1.html")
 
 @app.route("/article2")
-def article2():  #article2関数の定義
+def article2():
     return render_template("article2.html")
 
 @app.route("/create",methods=["GET","POST"])
@@ -39,6 +40,29 @@ def create():
         return redirect("/")
     else:
         return render_template("create.html")
+
+@app.route("/<int:id>/update",methods=["GET","POST"])   #DBのIDがルーティングの部分に持ってこれるように指定する
+def update(id):
+    post=Post.query.get(id)
+    if request.method == "GET":
+        return render_template("update.html",post=post)
+    else:
+        post.title = request.form.get("title")
+        post.body = request.form.get("body")
+        db.session.commit()
+        return redirect("/")
+
+@app.route("/<int:id>/delete",methods=["GET"])
+def delete(id):
+    post = Post.query.get(id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect("/")
+
+@app.route("/view/<int:id>")
+def view(id):
+    post = Post.query.get(id)
+    return render_template("view.html",post=post)
 
 if __name__ == '__main__':
     app.run(debug=True)
