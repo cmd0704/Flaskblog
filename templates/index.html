@@ -1,9 +1,8 @@
 {% extends "base.html"%} {% block content %}
-<h1>Flask Blog</h1>
+<h1 class="title">Flask Blog</h1>
 <p><a href="/create" role="button">新規登録</a></p>
 <article>
-  <h2>ホーム画面</h2>
-  <p>こちらはホーム画面です。</p>
+  <h1>ようこそ、FLSKBLOGへ！</h1>
   {% for post in posts %}
   <a href="/view/{{post.id}}"><h2>{{post.title}}</h2></a>
   {% endfor %}

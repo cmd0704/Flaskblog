@@ -1,0 +1,26 @@
+head{
+    text-align: center;
+}
+
+body{
+    text-align: center;
+    background-color: skyblue;
+    color: aliceblue;
+}
+
+.title{
+    margin: auto;
+    padding: auto;
+    border: 5px white;
+    background-color: aqua;
+}
+
+input.t{
+    width: 200px;
+    height: auto;
+}
+
+input.n{
+    width: 450px;
+    height: 100px;
+}
